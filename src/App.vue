@@ -3,3 +3,6 @@
     hello
   </div>
 </template>
+
+<script>
+</script>
