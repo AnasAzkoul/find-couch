@@ -9,7 +9,7 @@
           <RouterLink to="/coaches">All Coaches</RouterLink>
         </li>
         <li>
-          <RouterLink to="/contact">Requests</RouterLink>
+          <RouterLink to="/requests">Requests</RouterLink>
         </li>
       </ul>
     </nav>

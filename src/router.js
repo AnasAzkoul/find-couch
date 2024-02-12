@@ -1,11 +1,11 @@
-// router 
+// router
 import { createRouter, createWebHistory } from "vue-router";
 // components
 import CoachesList from "./pages/coaches/CoachesList.vue";
 import CoachDetails from "./pages/coaches/CoachDetails.vue";
 import CoachRegistration from "./pages/coaches/CoachRegistration.vue";
 import ContactCoach from "./pages/requests/ContactCoach.vue";
-import RequestsReceived from './pages/requests/RequestsRecieved.vue'; 
+import RequestsReceived from "./pages/requests/RequestsReceived.vue";
 import NotFound from "./pages/NotFound.vue";
 
 const router = createRouter({
@@ -16,7 +16,7 @@ const router = createRouter({
     {
       path: "/coaches/:id",
       component: CoachDetails,
-      children: [{ path: "/contact", component: ContactCoach }],
+      children: [{ path: "contact", component: ContactCoach }],
     },
     { path: "/register", component: CoachRegistration },
     { path: "/requests", component: RequestsReceived },
