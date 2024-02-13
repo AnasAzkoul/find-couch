@@ -29,8 +29,13 @@ export const useCoachesStore = defineStore("coaches", () => {
     return coaches.value && coaches.value.length > 0;
   });
 
+  const getCoachById = (id) => {
+    return coaches.value.find(item => item.id === id); 
+  }
+
   return {
     coaches,
     hasCoaches,
+    getCoachById
   };
 });
