@@ -2,7 +2,7 @@
 import BaseBadge from "../../components/ui/BaseBadge.vue";
 import BaseButton from "../../components/ui/BaseButton.vue";
 import BaseCard from "../../components/ui/BaseCard.vue";
-import { defineProps, computed, onBeforeMount, ref } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 import { useCoachesStore } from "../../stores/coachesStore";
 
 const selectedCoach = ref(null);
@@ -20,8 +20,16 @@ const fullName = computed(() => {
   return `${selectedCoach.value.firstName} ${selectedCoach.value.lastName}`;
 });
 
+const rate = computed(() => {
+  return selectedCoach.value.hourlyRate;
+});
+
 const contactLink = computed(() => {
-  return `contact/${props.id}`;
+  return `${props.id}/contact`;
+});
+
+const areas = computed(() => {
+  return selectedCoach.value.areas;
 });
 
 const description = computed(() => {
@@ -33,6 +41,7 @@ const description = computed(() => {
   <section>
     <BaseCard>
       <h2>{{ fullName }}</h2>
+      <h3>$ {{ rate }}</h3>
     </BaseCard>
   </section>
   <section>
@@ -46,12 +55,7 @@ const description = computed(() => {
   </section>
   <section>
     <BaseCard>
-      <BaseBadge
-        v-for="area in selectedCoach.areas"
-        :key="area"
-        :type="area"
-        :title="area"
-      />
+      <BaseBadge v-for="area in areas" :key="area" :type="area" :title="area" />
       <p>{{ description }}</p>
     </BaseCard>
   </section>

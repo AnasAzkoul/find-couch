@@ -29,13 +29,29 @@ export const useCoachesStore = defineStore("coaches", () => {
     return coaches.value && coaches.value.length > 0;
   });
 
+  const areasArray = computed(() => {
+    const areasMap = {};
+
+    coaches.value.forEach((item) => {
+      item.areas.forEach((area, index) => {
+        if (!areasMap[index]) {
+          areasMap[index] = area;
+        }
+      });
+    });
+
+    return Object.values(areasMap);
+  });
+
   const getCoachById = (id) => {
-    return coaches.value.find(item => item.id === id); 
-  }
+    return coaches.value.find((item) => item.id === id);
+  };
+  // Todo: move the filter func and state to global
 
   return {
     coaches,
     hasCoaches,
-    getCoachById
+    getCoachById,
+    areasArray,
   };
 });

@@ -1,17 +1,42 @@
 <script setup>
+import { ref, computed } from "vue";
 import { useCoachesStore } from "../../stores/coachesStore";
 import { storeToRefs } from "pinia";
 import CoachItem from "../../components/coaches/CoachItem.vue";
 import BaseCard from "../../components/ui/BaseCard.vue";
 import BaseButton from "../../components/ui/BaseButton.vue";
+import CoachFilter from "../../components/coaches/CoachFilter.vue";
 
 const coachesStore = useCoachesStore();
 
 const { coaches, hasCoaches } = storeToRefs(coachesStore);
+
+const activeFilters = ref({
+  frontend: true, 
+  backend: true, 
+  career: true
+});
+
+const filteredCoaches = computed(() => {
+  return coaches.value.filter((coach) => {
+    coach.areas.some((area) => {
+      if (activeFilters.value[area]) {
+        return true;
+      }
+      return false;
+    });
+  });
+});
+
+const setFilters = (data) => {
+  activeFilters.value = { ...data };
+};
 </script>
 
 <template>
-  <section>Filter</section>
+  <section>
+    <CoachFilter @change-filter="setFilters" />
+  </section>
   <section>
     <BaseCard>
       <div class="controls">
@@ -21,7 +46,11 @@ const { coaches, hasCoaches } = storeToRefs(coachesStore);
         </BaseButton>
       </div>
       <ul v-if="hasCoaches">
-        <CoachItem v-for="coach in coaches" :key="coach.id" :coach="coach" />
+        <CoachItem
+          v-for="coach in filteredCoaches"
+          :key="coach.id"
+          :coach="coach"
+        />
       </ul>
       <h3 v-else>No Coaches Found</h3>
     </BaseCard>
