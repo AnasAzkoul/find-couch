@@ -1,5 +1,4 @@
 <script setup>
-import { ref, computed } from "vue";
 import { useCoachesStore } from "../../stores/coachesStore";
 import { storeToRefs } from "pinia";
 import CoachItem from "../../components/coaches/CoachItem.vue";
@@ -9,33 +8,12 @@ import CoachFilter from "../../components/coaches/CoachFilter.vue";
 
 const coachesStore = useCoachesStore();
 
-const { coaches, hasCoaches } = storeToRefs(coachesStore);
-
-const activeFilters = ref({
-  frontend: true, 
-  backend: true, 
-  career: true
-});
-
-const filteredCoaches = computed(() => {
-  return coaches.value.filter((coach) => {
-    coach.areas.some((area) => {
-      if (activeFilters.value[area]) {
-        return true;
-      }
-      return false;
-    });
-  });
-});
-
-const setFilters = (data) => {
-  activeFilters.value = { ...data };
-};
+const { hasCoaches, filteredCoaches } = storeToRefs(coachesStore);
 </script>
 
 <template>
   <section>
-    <CoachFilter @change-filter="setFilters" />
+    <CoachFilter />
   </section>
   <section>
     <BaseCard>

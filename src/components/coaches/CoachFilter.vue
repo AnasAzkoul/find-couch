@@ -1,31 +1,15 @@
 <script setup>
-import { onBeforeMount, ref } from "vue";
 import BaseCard from "../ui/BaseCard.vue";
-import { useCoachesStore } from "../../stores/coachesStore";
+import {useFiltersStore} from "../../stores/FiltersStore";
+import {useCoachesStore} from '../../stores/coachesStore'
 
-const coachesStore = useCoachesStore();
-
-const checkboxes = ref({});
-
-const emits = defineEmits(["changeFilter"]);
-
-onBeforeMount(() => {
-  if (coachesStore.areasArray) {
-    coachesStore.areasArray.forEach((area) => {
-      checkboxes.value[area] = true;
-    });
-  }
-});
+const filtersStore = useFiltersStore(); 
+const coachesStore = useCoachesStore(); 
 
 const setFilter = (event) => {
   const inputId = event.target.id;
   const isActive = event.target.checked;
-  const updatedFilters = {
-    ...checkboxes.value,
-    [inputId]: isActive,
-  };
-  checkboxes.value = updatedFilters;
-  emits("changeFilter", checkboxes.value);
+  filtersStore.updateActiveFilters(inputId, isActive); 
 };
 </script>
 
