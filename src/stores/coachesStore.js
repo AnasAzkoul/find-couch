@@ -62,6 +62,20 @@ export const useCoachesStore = defineStore("coaches", () => {
     return Object.values(areasMap);
   });
 
+  const areasMap = computed(() => {
+    const map = {};
+
+    coaches.value.forEach((coach) => {
+      coach.areas.forEach((area) => {
+        if (!map[area]) {
+          map[area] = true;
+        }
+      });
+    });
+
+    return map;
+  });
+
   const filteredCoaches = computed(() => {
     const filtersStore = useFiltersStore();
     const filterCoaches = coaches.value.filter((coach) => {
@@ -82,6 +96,7 @@ export const useCoachesStore = defineStore("coaches", () => {
     coaches,
     hasCoaches,
     areasArray,
+    areasMap,
     filteredCoaches,
     getCoachById,
   };
