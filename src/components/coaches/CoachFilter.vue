@@ -1,7 +1,8 @@
 <script setup>
 import BaseCard from "../ui/BaseCard.vue";
 import {useFiltersStore} from "../../stores/FiltersStore";
-import {useCoachesStore} from '../../stores/coachesStore'
+import {useCoachesStore} from '../../stores/coachesStore'; 
+import {defineSlots} from 'vue'; 
 
 const filtersStore = useFiltersStore(); 
 const coachesStore = useCoachesStore(); 

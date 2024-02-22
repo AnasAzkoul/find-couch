@@ -1,12 +1,3 @@
-<template>
-  <button v-if="!link" :class="modeClass">
-    <slot></slot>
-  </button>
-  <RouterLink v-else :to="props.to" :class="modeClass">
-    <slot></slot>
-  </RouterLink>
-</template>
-
 <script setup>
 import { defineProps, computed } from "vue";
 
@@ -25,16 +16,25 @@ const props = defineProps({
 });
 
 const modeClass = computed(() => {
-  switch(props.mode) {
-    case 'outline': 
-      return 'outline'
-    case 'flat': 
-      return 'flat'
-    default: 
-      return ''
+  switch (props.mode) {
+    case "outline":
+      return "outline";
+    case "flat":
+      return "flat";
+    default:
+      return "";
   }
 });
 </script>
+
+<template>
+  <button v-if="!link" :class="modeClass">
+    <slot></slot>
+  </button>
+  <RouterLink v-else :to="props.to" :class="modeClass">
+    <slot></slot>
+  </RouterLink>
+</template>
 
 <style scoped>
 button,

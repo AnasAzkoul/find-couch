@@ -48,20 +48,6 @@ export const useCoachesStore = defineStore("coaches", () => {
     return coaches.value && coaches.value.length > 0;
   });
 
-  const areasArray = computed(() => {
-    const areasMap = {};
-
-    coaches.value.forEach((item) => {
-      item.areas.forEach((area, index) => {
-        if (!areasMap[index]) {
-          areasMap[index] = area;
-        }
-      });
-    });
-
-    return Object.values(areasMap);
-  });
-
   const areasMap = computed(() => {
     const map = {};
 
@@ -74,6 +60,10 @@ export const useCoachesStore = defineStore("coaches", () => {
     });
 
     return map;
+  });
+
+  const areasArray = computed(() => {
+    return Object.keys(areasMap.value);
   });
 
   const filteredCoaches = computed(() => {
@@ -92,6 +82,11 @@ export const useCoachesStore = defineStore("coaches", () => {
     return coaches.value.find((item) => item.id === id);
   }
 
+  function registerNewCoach(data) {
+    coaches.value = [data, ...coaches.value];
+    console.log(coaches.value);
+  }
+
   return {
     coaches,
     hasCoaches,
@@ -99,5 +94,6 @@ export const useCoachesStore = defineStore("coaches", () => {
     areasMap,
     filteredCoaches,
     getCoachById,
+    registerNewCoach,
   };
 });
