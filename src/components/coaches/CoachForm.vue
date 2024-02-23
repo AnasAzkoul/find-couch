@@ -1,15 +1,16 @@
 <script setup>
 import { ref } from "vue";
 import { useCoachesStore } from "../../stores/coachesStore";
+import router from "../../router";
 import BaseButton from "../ui/BaseButton.vue";
 import BaseCard from "../ui/BaseCard.vue";
 
 const coachesStore = useCoachesStore();
 
 const formData = ref({
-  firstName: null,
-  lastName: null,
-  description: null,
+  firstName: "",
+  lastName: "",
+  description: "",
   hourlyRate: null,
   areas: [],
 });
@@ -19,13 +20,44 @@ const handleCheckBoxChange = (event) => {
   const isChecked = event.target.checked;
 
   if (isChecked) {
-    formData.value.areas = [id, ...formData.value.areas];
+    formData.value.areas.val = [id, ...formData.value.areas];
   }
+};
+
+const validateInput = (id, value) => {
+  if (typeof value === "string") {
+    if (
+      formData.value[id].length < 4 ||
+      formData.value[id] === null ||
+      formData.value[id] === ""
+    ) {
+      return false;
+    }
+  }
+
+  if (typeof value === "number") {
+    if (formData.value[id] < 0 || !formData.value[id]) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+const handleOnBlur = (event) => {
+  const parentNode = event.target.parentNode;
+  const isValid = validateInput(event.target.id, event.target.value);
+  if (!isValid) {
+    parentNode.classList.add("invalid");
+    return;
+  }
+  parentNode.classList.remove("invalid");
 };
 
 const handleSubmit = () => {
   formData.value["id"] = new Date().toISOString();
   coachesStore.registerNewCoach(formData.value);
+  router.replace("/coaches");
 };
 </script>
 
@@ -34,29 +66,40 @@ const handleSubmit = () => {
     <BaseCard>
       <div class="form-control">
         <label for="firstName">First Name</label>
-        <input type="text" id="firstName" v-model="formData.firstName" />
+        <input
+          type="text"
+          id="firstName"
+          v-model.trim="formData.firstName"
+          @blur="handleOnBlur"
+        />
       </div>
       <div class="form-control">
         <label for="lastName">Last Name</label>
-        <input type="text" id="lastName" v-model="formData.lastName" />
+        <input
+          type="text"
+          id="lastName"
+          v-model.trim="formData.lastName"
+          @blur="handleOnBlur"
+        />
       </div>
       <div class="form-control">
         <label for="desc">Description</label>
-        <textarea id="desc" rows="5" v-model="formData.description" />
+        <textarea id="desc" rows="5" v-model.trim="formData.description" />
       </div>
       <div class="form-control">
         <label for="rate">Hourly Rate</label>
-        <input id="rate" type="number" v-model="formData.hourlyRate" />
+        <input id="rate" type="number" v-model.number="formData.hourlyRate" />
       </div>
       <div class="form-control">
         <h3>Areas of Expertise</h3>
       </div>
-      <div
-        v-for="area in coachesStore.areasArray"
-        :key="area"
-        @change="handleCheckBoxChange"
-      >
-        <input type="checkbox" :id="area" :value="area" />
+      <div v-for="area in coachesStore.areasArray" :key="area">
+        <input
+          type="checkbox"
+          :id="area"
+          :value="area"
+          @change="handleCheckBoxChange"
+        />
         <label :for="area">{{ area }}</label>
       </div>
 
@@ -66,12 +109,6 @@ const handleSubmit = () => {
 </template>
 
 <style scoped>
-/* form {
-  max-width: 650px;
-  margin: 0 auto;
-  padding: 10px;
-} */
-
 .form-control {
   margin: 0.5rem 0;
 }
@@ -126,4 +163,12 @@ h3 {
 .invalid textarea {
   border: 1px solid red;
 }
+/* .valid label {
+  color: green;
+}
+
+.valid input,
+.valid textarea {
+  border: 1px solid green;
+} */
 </style>
